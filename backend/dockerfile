@@ -2,14 +2,14 @@ FROM openjdk:17-jdk-slim
 
 WORKDIR /app
 
-# Download Tomcat (if you must use it)
+# Download and extract Tomcat
 ADD https://archive.apache.org/dist/tomcat/tomcat-8/v8.5.100/bin/apache-tomcat-8.5.100.tar.gz ./
 RUN apt-get update && apt-get install -y tar && \
     tar -xzf apache-tomcat-8.5.100.tar.gz -C /opt/ && \
     rm apache-tomcat-8.5.100.tar.gz
 
-# Add MySQL connector JAR (optional if needed)
-ADD https://s3-us-west-2.amazonaws.com/studentapi-cit/mysql-connector.war /opt/tomcat/lib/
+# Copy WAR file from backend folder into Tomcat
+COPY backend/student.war /opt/apache-tomcat-8.5.100/webapps/
 
 EXPOSE 8080
 
