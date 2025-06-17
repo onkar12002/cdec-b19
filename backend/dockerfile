@@ -9,7 +9,7 @@ RUN apt-get update && apt-get install -y tar && \
     rm apache-tomcat-8.5.100.tar.gz
 
 # Add MySQL connector JAR (optional if needed)
-ADD https://s3-us-west-2.amazonaws.com/studentapi-cit/mysql-connector.jar /opt/tomcat/lib/
+ADD https://s3-us-west-2.amazonaws.com/studentapi-cit/mysql-connector.war /opt/tomcat/lib/
 
 EXPOSE 8080
 
