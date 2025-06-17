@@ -1,12 +1,16 @@
-FROM centos:7
-RUN yum install java-11-openjdk -y
-ADD https://archive.apache.org/dist/tomcat/tomcat-8/v8.5.100/bin/apache-tomcat-8.5.100.tar.gz ./
-RUN tar -xzf apache-tomcat-8.5.100.tar.gz -C /opt/ && \
-    rm -rf ./apache-tomcat-8.5.100.tar.gz
-WORKDIR /opt/apache-tomcat-8.5.100
-COPY context.xml conf/context.xml
-ADD https://s3-us-west-2.amazonaws.com/studentapi-cit/mysql-connector.jar lib/mysql-connector.jar
-COPY student.war webapps/student.war
-EXPOSE 8080
-CMD ["./bin/catalina.sh", "run"]
+FROM openjdk:17-jdk-slim
 
+WORKDIR /app
+
+# Download Tomcat (if you must use it)
+ADD https://archive.apache.org/dist/tomcat/tomcat-8/v8.5.100/bin/apache-tomcat-8.5.100.tar.gz ./
+RUN apt-get update && apt-get install -y tar && \
+    tar -xzf apache-tomcat-8.5.100.tar.gz -C /opt/ && \
+    rm apache-tomcat-8.5.100.tar.gz
+
+# Add MySQL connector JAR (optional if needed)
+ADD https://s3-us-west-2.amazonaws.com/studentapi-cit/mysql-connector.jar /opt/tomcat/lib/
+
+EXPOSE 8080
+
+CMD ["/opt/apache-tomcat-8.5.100/bin/catalina.sh", "run"]
